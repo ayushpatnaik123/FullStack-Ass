@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Year Countdown</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #countdown-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #countrySelection {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        #countdown {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #countryTitle {
+            font-size: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div id="countdown-container">
+    <div id="countrySelection">
+        <label>
+            <input type="radio" name="country" value="India" checked> India
+        </label>
+        <label>
+            <input type="radio" name="country" value="USA"> USA
+        </label>
+        <label>
+            <input type="radio" name="country" value="Japan"> Japan
+        </label>
+    </div>
+
+    <div id="countdown"></div>
+    <div id="countryTitle"></div>
+</div>
+
+<script>
+    function updateCountdown() {
+        const countryRadioButtons = document.getElementsByName("country");
+        let selectedCountry;
+
+        for (const radioButton of countryRadioButtons) {
+            if (radioButton.checked) {
+                selectedCountry = radioButton.value;
+                break;
+            }
+        }
+
+        const newYearDate = getNewYearDate(selectedCountry);
+
+        const currentDate = new Date();
+        const timeDifference = newYearDate - currentDate;
+
+        if (timeDifference <= 0) {
+            document.getElementById("countdown").innerHTML = "Happy New Year!";
+        } else {
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = `
+                ${days}d ${hours}h ${minutes}m ${seconds}s
+            `;
+
+            document.getElementById("countryTitle").innerHTML = `Countdown to New Year in ${selectedCountry}`;
+            setTimeout(updateCountdown, 1000);
+        }
+    }
+
+    function getNewYearDate(country) {
+        const newYearDates = {
+            "India": new Date("January 1, 2025 00:00:00 GMT+0530"),
+            "USA": new Date("January 1, 2025 00:00:00 GMT-0500"),
+            "Japan": new Date("January 1, 2025 00:00:00 GMT+0900")
+        };
+
+        return newYearDates[country];
+    }
+
+    const countryRadioButtons = document.getElementsByName("country");
+    for (const radioButton of countryRadioButtons) {
+        radioButton.addEventListener("change", updateCountdown);
+    }
+
+    updateCountdown();
+</script>
+
+</body>
+</html>
